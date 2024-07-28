@@ -90,9 +90,9 @@ jobs:
 
     - name: Outputs
       run: |
-        WORKDIR="$(pwd)"
+        cd $GITHUB_WORKSPACE
         find bin -type f -exec ls -lh {} \;
-        find bin -type f -name "*.ipk" -exec cp -f {} "${WORKDIR}" \; 
+        find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}" \; 
 
     - name: Upload Artefacts
       uses: actions/upload-artifact@v2
