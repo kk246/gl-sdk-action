@@ -40,13 +40,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Update System Packages
+      run: |
+        sudo -E apt-get update
+        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+
     - name: Download gl-sdk
       run: |
         cd $GITHUB_WORKSPACE
         chmod +x ./build.sh
         ./build.sh
 
-    - name: Update ./scripts/feeds
+    - name: Acquire ./scripts/feeds
       run: ./scripts/feeds update -a
 
     - name: Install ./scripts/feeds
@@ -65,6 +70,7 @@ jobs:
 
     - name: Outputs
       run: |
+        WORKDIR="$(pwd)"
         find bin -type f -exec ls -lh {} \;
         find bin -type f -name "*.ipk" -exec cp -f {} "${WORKDIR}" \; 
 
