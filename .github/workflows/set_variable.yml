@@ -61,6 +61,7 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
         ./scripts/feeds update -a
+      continue-on-error: true
 
     - name: Install ./scripts/feeds
       run: |
