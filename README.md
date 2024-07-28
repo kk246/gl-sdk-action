@@ -5,6 +5,7 @@ https://forum.gl-inet.cn/forum.php?mod=viewthread&tid=539&extra=page%3D1
 **Translated content from link above:**
 
 In order to help you compile plug-ins, I made a plug-in library based on github action, which can help you automatically compile the plug-ins you need.
+
 Currently supported models:
 AX1800
 AXT1800
