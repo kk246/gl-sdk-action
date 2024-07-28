@@ -19,7 +19,7 @@ on:
         description: 'Openwrt package name'  
         required: true
       email:
-        description: 'Git accuont email address'  
+        description: 'Git account email address'
         required: false
       password:
         description: 'Git account password'  
@@ -40,33 +40,48 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Update System Packages
+    - name: Get PKGNAME
       run: |
-        sudo -E apt-get update
-        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+        mkdir -p  ${GITHUB_WORKSPACE}/buildsource
+        cd ${GITHUB_WORKSPACE}/buildsource
+        git clone "$SOURCECODEURL"
 
-    - name: Download gl-sdk
+    - name: Get gl-sdk
       run: |
         cd $GITHUB_WORKSPACE
         chmod +x ./build.sh
         ./build.sh
 
     - name: Acquire ./scripts/feeds
-      run: ./scripts/feeds update -a
+      run: |
+        cd $GITHUB_WORKSPACE/openwrt-sdk
+        ./scripts/feeds update -a
 
     - name: Install ./scripts/feeds
-      run: ./scripts/feeds install -a
+      run: |
+        cd $GITHUB_WORKSPACE/openwrt-sdk
+        ./scripts/feeds install -a
+
+    - name: Update System Packages
+      run: |
+        sudo -E apt-get update
+        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
 
     - name: Make defconfig
       run: |
+        cd $GITHUB_WORKSPACE/openwrt-sdk
         echo CONFIG_ALL=y >.config
         make defconfig
         
     - name: Make ./package/feeds/luci/luci-base/compile
-      run: make V=s ./package/feeds/luci/luci-base/compile
+      run: |
+        cd $GITHUB_WORKSPACE/openwrt-sdk
+        make V=s ./package/feeds/luci/luci-base/compile
 
     - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
-      run: make V=s ./package/feeds/githubaction/${PKGNAME}/compile
+      run: |
+        cd $GITHUB_WORKSPACE/openwrt-sdk
+        make V=s ./package/feeds/githubaction/${PKGNAME}/compile
 
     - name: Outputs
       run: |
