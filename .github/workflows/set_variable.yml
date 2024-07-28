@@ -87,7 +87,7 @@ jobs:
     - name: ZIP_ALL
       run: |
         cd $GITHUB_WORKSPACE
-        tar -czvf openwrt-sdk${{ github.event.inputs.device }}-full.zip openwrt-sdk/
+        tar -czvf openwrt-sdk${{ github.event.inputs.device }}-full.tar.gz openwrt-sdk/
         ls -l
 
     - name: Collect IPKs
