@@ -55,6 +55,9 @@ https://forum.gl-inet.cn/forum.php?mod=viewthread&tid=539&extra=page%3D1
 > After downloading and unzipping, find the required ipk file
 > 
 > 5. Transfer the ipk file to the router backend and use the opkg command to install it.
+>
 > update record
+> 
 > 2022-11-18 update: Support MT2500
+> 
 > 2023-02-03 update: Support MT3000, AX1800
