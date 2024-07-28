@@ -67,7 +67,6 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
         ./scripts/feeds install -a
-      continue-on-error: true
 
     - name: Make defconfig
       run: |
