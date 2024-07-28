@@ -90,23 +90,23 @@ jobs:
         tar -czvf openwrt-sdk${{ github.event.inputs.device }}-used.zip openwrt-sdk/
         ls -l
 
-    - name: Collect IPKs
-      run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
-        find bin -type f -exec ls -lh {} \;
-        find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}" \; 
+    # - name: Collect IPKs
+    #   run: |
+    #     cd $GITHUB_WORKSPACE/openwrt-sdk
+    #     find bin -type f -exec ls -lh {} \;
+    #     find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}" \; 
 
     - name: Print Working Directory
       run: |
         pwd
         ls -al
 
-    - name: Upload Artefacts 1
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ github.event.inputs.pkgname }}_related_ipks
-        path: |
-          ./*ipk*
+    # - name: Upload Artefacts 1
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: ${{ github.event.inputs.pkgname }}_related_ipks
+    #     path: |
+    #       ./*ipk*
 
     - name: Upload Artefacts 2
       uses: actions/upload-artifact@v2
