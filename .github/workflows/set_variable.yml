@@ -40,6 +40,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Update System Packages
+      run: |
+        sudo -E apt-get update
+        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+
     - name: Get PKGNAME
       run: |
         mkdir -p  ${GITHUB_WORKSPACE}/buildsource
@@ -61,11 +66,6 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
         ./scripts/feeds install -a
-
-    - name: Update System Packages
-      run: |
-        sudo -E apt-get update
-        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
 
     - name: Make defconfig
       run: |
