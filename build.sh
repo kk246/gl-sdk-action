@@ -12,11 +12,6 @@ git config --global user.email "${EMAIL}"
 git config --global user.name "aa"
 [ -n "${PASSWORD}" ] && git config --global user.password "${PASSWORD}"
 
-mkdir -p  ${WORKDIR}/buildsource
-cd  ${WORKDIR}/buildsource
-git clone "$SOURCECODEURL"
-cd  ${WORKDIR}
-
 
 mips_siflower_sdk_get() {
 	 git clone https://github.com/gl-inet-builder/openwrt-sdk-siflower-1806.git openwrt-sdk
