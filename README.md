@@ -34,11 +34,11 @@ Usage tutorial:
 
 . Select the target device to be compiled
 
-   . In the drop-down input box source code URL, fill in the source code address of the plug-in that needs to be compiled  
-   ( Be careful to use https, do not use ssh , example: 
+   . In the drop-down input box source code URL, 
+   
+   fill in the source code address of the plug-in that needs to be compiled  (Be careful to use https, do not use ssh , example: 
    
    https://github.com/luochongjun/edgerouter.git 
-   
    ）
    
    . In the drop-down input box Openwrt package name, fill in the name of the plug-in that needs to be compiled (the name of the plug-in to be compiled, 
@@ -54,7 +54,8 @@ Usage tutorial:
 
 4. Next, compilation will be performed automatically. The compilation time may be as fast as 2 or 3 minutes, depending on the compilation time of the plug-in itself.
 
-5. After the compilation is completed, click on the corresponding job to view the compiled plug-in compressed package. The compressed package contains the plug-in you need to compile and all dependent software packages.
+5. After the compilation is completed, click on the corresponding job to view the compiled plug-in compressed package.
+   The compressed package contains the plug-in you need to compile and all dependent software packages.
 
 After downloading and unzipping, find the required ipk file
 
