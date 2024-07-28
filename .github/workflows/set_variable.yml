@@ -86,9 +86,9 @@ jobs:
 
     - name: Outputs
       run: |
-        cd $GITHUB_WORKSPACE
+        cd $GITHUB_WORKSPACE/openwrt-sdk
         find bin -type f -exec ls -lh {} \;
-        find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}" \; 
+        find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/openwrt-sdk" \; 
 
     - name: Upload Artefacts
       uses: actions/upload-artifact@v2
