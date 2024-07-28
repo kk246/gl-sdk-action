@@ -74,19 +74,16 @@ jobs:
         cd $GITHUB_WORKSPACE/openwrt-sdk
         echo CONFIG_ALL=y >.config
         make defconfig
-      continue-on-error: true
         
     - name: Make ./package/feeds/luci/luci-base/compile
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
         make V=s ./package/feeds/luci/luci-base/compile
-      continue-on-error: true
 
     - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
         make V=s ./package/feeds/githubaction/${PKGNAME}/compile
-      continue-on-error: true
 
     - name: Outputs
       run: |
