@@ -86,12 +86,6 @@ jobs:
         cd $GITHUB_WORKSPACE/openwrt-sdk
         make V=s ./package/feeds/luci/luci-base/compile
 
-    - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
-      if: steps.cache-primes.outputs.cache-hit != 'true'
-      run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
-        make V=s ./package/feeds/githubaction/${PKGNAME}/compile
-
     - name: Save Cache SDK
       if: steps.cache-primes.outputs.cache-hit != 'true'
       id: cache-primes-save
@@ -114,10 +108,10 @@ jobs:
         echo Contents of "feeds.conf.default"
         cat feeds.conf.default
         
-    - name: Compile PKGNAME
+    - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
       run: |
         cd $GITHUB_WORKSPACE/openwrt-sdk
-        make package/feeds/githubaction/edgerouter/compile
+        make V=s ./package/feeds/githubaction/${PKGNAME}/compile
 
     - name: Outputs
       run: |
