@@ -49,12 +49,3 @@ case "$BOARD" in
 	;;
 	*)
 esac
-
-cd openwrt-sdk
-sed -i "1i\src-link githubaction ${WORKDIR}/buildsource" feeds.conf.default
-
-echo Contents of "$(pwd)"
-ls -l
-
-echo Contents of "feeds.conf.default"
-cat feeds.conf.default
