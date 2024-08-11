@@ -1,3 +1,5 @@
+run-name: Build ${{ github.event.inputs.pkgname }} for ${{ github.event.inputs.device }}
+
 on: 
   workflow_dispatch:
     inputs:
