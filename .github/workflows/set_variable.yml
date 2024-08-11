@@ -101,6 +101,7 @@ jobs:
           git clone "$SOURCECODEURL"
   
       - name: Install PKGNAME
+        working-directory: ./openwrt-sdk
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
           sed -i "1i\src-link githubaction ${GITHUB_WORKSPACE}/buildsource" feeds.conf.default
@@ -113,15 +114,15 @@ jobs:
           ls -R | grep ":$" | sed -e 's/:$//'
 
       - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
+        working-directory: ./openwrt-sdk
         run: |
-          cd $GITHUB_WORKSPACE/openwrt-sdk
           ./scripts/feeds update githubaction
           ./scripts/feeds install ${PKGNAME}
           make V=s ./package/feeds/githubaction/${PKGNAME}/compile
   
-      - name: Outputs
+      - name: Preparing *.IPKs for Upload
+        working-directory: ./openwrt-sdk
         run: |
-          cd $GITHUB_WORKSPACE/openwrt-sdk
           find bin -type f -exec ls -lh {} \;
           find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
   
@@ -131,10 +132,15 @@ jobs:
           name: ${{ github.event.inputs.pkgname }}_related_ipks
           path: |
             ./output_ipks/*ipk*
-
-      - name: Upload Artefacts (SDK)
+            
+      - name: Preparing GL-SDK for Upload
+        run: |
+          tar -czvf glsdk-${{ github.event.inputs.device }}-full.tar.gz openwrt-sdk/
+          ls -l
+          
+      - name: Upload Artefacts (GL-SDK)
         uses: actions/upload-artifact@v2
         with:
           name: glsdk-${{ github.event.inputs.device }}
           path: |
-            ./openwrt-sdk/
+            ./glsdk-${{ github.event.inputs.device }}-full.tar.gz
