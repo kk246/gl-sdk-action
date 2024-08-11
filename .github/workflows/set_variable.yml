@@ -116,6 +116,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
           ./scripts/feeds update githubaction
+          ./scripts/feeds install ${PKGNAME}
           make V=s ./package/feeds/githubaction/${PKGNAME}/compile
   
       - name: Outputs
