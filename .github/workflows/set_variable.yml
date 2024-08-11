@@ -125,11 +125,13 @@ jobs:
         run: |
           find bin -type f -exec ls -lh {} \;
           find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
+          ls -al "${GITHUB_WORKSPACE}/output_ipks/"
   
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.inputs.pkgname }}_related_ipks
+          if-no-files-found: error
           path: |
             ./output_ipks/*ipk*
             
