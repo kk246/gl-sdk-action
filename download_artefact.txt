@@ -1,0 +1,4 @@
+# https://cli.github.com/manual/gh_run_download
+gh run download RUN_ID --repo "kk246/gl-sdk-action"
+
+gh run download 10340021810 --repo "kk246/gl-sdk-action"
