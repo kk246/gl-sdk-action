@@ -1,4 +1,8 @@
 on: 
+  push:
+    paths:
+      - 'projects/my_dbt_project/**'
+      - '.github/workflows/my_dbt_project_deployment.yml'
   workflow_dispatch:
     inputs:
       device:
@@ -26,9 +30,9 @@ on:
         required: false
 
 env:
-  SOURCECODEURL: ${{ github.event.inputs.sourcecode }}
-  PKGNAME: ${{ github.event.inputs.pkgname }}
-  BOARD: ${{ github.event.inputs.device }}
+  SOURCECODEURL: ${{ github.event.inputs.sourcecode || 'https://github.com/luochongjun/edgerouter.git' }}
+  PKGNAME: ${{ github.event.inputs.pkgname || 'edgerouter' }}
+  BOARD: ${{ github.event.inputs.device || 'MT2500' }}
   EMAIL: ${{ github.event.inputs.email }}
   PASSWORD: ${{ github.event.inputs.password }}
 
