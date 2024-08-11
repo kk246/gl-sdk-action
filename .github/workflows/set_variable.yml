@@ -1,8 +1,7 @@
 on: 
   push:
     paths:
-      - 'projects/my_dbt_project/**'
-      - '.github/workflows/my_dbt_project_deployment.yml'
+      - '.github/workflows/**.yml'
   workflow_dispatch:
     inputs:
       device:
