@@ -107,14 +107,15 @@ jobs:
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
 
-      - name: Print Folders in Working Directory
+      - name: Print Folders within Github Workspace
         run: |
           echo "Contents of '$(pwd)'"
-          ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
+          ls -R | grep ":$" | sed -e 's/:$//'
 
       - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
+          ./scripts/feeds update githubaction
           make V=s ./package/feeds/githubaction/${PKGNAME}/compile
   
       - name: Outputs
