@@ -1,7 +1,4 @@
 on: 
-  push:
-    paths:
-      - '.github/workflows/**.yml'
   workflow_dispatch:
     inputs:
       device:
@@ -59,7 +56,6 @@ jobs:
         if: steps.cache-restore.outputs.cache-hit != 'true'
         working-directory: ./
         run: |
-          cd $GITHUB_WORKSPACE
           chmod +x ./build.sh
           ./build.sh
 
@@ -126,6 +122,7 @@ jobs:
       - name: Preparing *.IPKs for Upload
         working-directory: ./openwrt-sdk
         run: |
+          mkdir "${GITHUB_WORKSPACE}/output_ipks"
           find bin -type f -exec ls -lh {} \;
           find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
           ls -al "${GITHUB_WORKSPACE}/output_ipks/"
