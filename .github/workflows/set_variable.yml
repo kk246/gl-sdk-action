@@ -103,7 +103,7 @@ jobs:
       - name: Install PKGNAME
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
-          sed -i "1i\src-link githubaction ${WORKDIR}/buildsource" feeds.conf.default
+          sed -i "1i\src-link githubaction ${GITHUB_WORKSPACE}/buildsource" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
           
