@@ -43,50 +43,50 @@ jobs:
     - name: Update System Packages
       run: |
         sudo -E apt-get update
-        sudo -E apt-get install git  asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+        sudo -E apt-get install -y asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
+        mkdir -p  ${GITHUB_WORKSPACE}/buildsource
 
     - name: Get PKGNAME
+      working-directory: ./buildsource
       run: |
-        mkdir -p  ${GITHUB_WORKSPACE}/buildsource
-        cd ${GITHUB_WORKSPACE}/buildsource
         git clone "$SOURCECODEURL"
 
     - name: Get gl-sdk
+      working-directory: ./
       run: |
-        cd $GITHUB_WORKSPACE
         chmod +x ./build.sh
         ./build.sh
 
     - name: Acquire ./scripts/feeds
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         ./scripts/feeds update -a
       continue-on-error: true
 
     - name: Install ./scripts/feeds
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         ./scripts/feeds install -a
 
     - name: Make defconfig
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         echo CONFIG_ALL=y >.config
         make defconfig
         
     - name: Make ./package/feeds/luci/luci-base/compile
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         make V=s ./package/feeds/luci/luci-base/compile
 
     - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         make V=s ./package/feeds/githubaction/${PKGNAME}/compile
 
     - name: Outputs
+      working-directory: ./openwrt-sdk
       run: |
-        cd $GITHUB_WORKSPACE/openwrt-sdk
         find bin -type f -exec ls -lh {} \;
         find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}" \; 
 
