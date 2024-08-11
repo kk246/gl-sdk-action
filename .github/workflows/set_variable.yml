@@ -49,7 +49,7 @@ jobs:
         id: cache-restore
         uses: actions/cache/restore@v4
         with:
-          path: $GITHUB_WORKSPACE/openwrt-sdk
+          path: ./openwrt-sdk/
           key: glsdk-${{ github.event.inputs.device }}
           
       - name: Get gl-sdk
@@ -91,7 +91,7 @@ jobs:
         id: cache-primes-save
         uses: actions/cache/save@v4
         with:
-          path: $GITHUB_WORKSPACE/openwrt-sdk
+          path: ./openwrt-sdk/
           key: glsdk-${{ github.event.inputs.device }}
 
       - name: Get PKGNAME
