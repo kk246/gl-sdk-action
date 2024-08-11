@@ -106,7 +106,12 @@ jobs:
           sed -i "1i\src-link githubaction ${GITHUB_WORKSPACE}/buildsource" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
-          
+
+      - name: Print Folders in Working Directory
+        run: |
+          echo "Contents of '$(pwd)'"
+          ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
+
       - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
