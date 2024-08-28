@@ -121,18 +121,19 @@ jobs:
           	PKG_NAME_VALUE=$(grep 'PKG_NAME' "$MAKEFILE" | awk -F'=' '{print $2}' | tr -d '[:space:]')
           	echo "MAKEFILE_DIR is set to: $MAKEFILE_DIR"
           	echo "PKG_NAME is set to: $PKG_NAME_VALUE"
-            echo "{PATH}={$MAKEFILE_DIR}" >> "$GITHUB_OUTPUT"
+            echo "{ROOT}={$MAKEFILE_DIR}" >> "$GITHUB_OUTPUT"
             echo "{NAME}={$PKG_NAME}" >> "$GITHUB_OUTPUT"
+            cd $GITHUB_WORKSPACE/openwrt-sdk
+            sed -i "1i\src-link githubaction $MAKEFILE_DIR" feeds.conf.default
           else
           	echo "Either no Makefile or multiple Makefiles found."
           	exit 1
           fi
-  
+          
       - name: Install PKGNAME
         working-directory: ./openwrt-sdk
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
-          sed -i "1i\src-link githubaction ${{ steps.pkg.outputs.PATH }}" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
 
