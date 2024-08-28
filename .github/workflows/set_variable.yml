@@ -149,6 +149,7 @@ jobs:
 
       - name: Print Folders within Github Workspace
         run: |
+          cd ${{ steps.pkg.outputs.PATH }}
           echo "Contents of '$(pwd)'"
           ls -R | grep ":$" | sed -e 's/:$//'
 
