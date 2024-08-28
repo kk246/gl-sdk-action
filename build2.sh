@@ -58,7 +58,7 @@ fi
 banner "Get Path"
 PACKAGE_ROOT_USED=$PACKAGE_ROOT
 
-cd $SDK_ROOT
+cd $PACKAGE_ROOT
 PKG_OPENWRT_DIR="$PACKAGE_ROOT/openwrt"
 if [ ! -f "$PKG_OPENWRT_DIR" ]; then
 	cd "$PKG_OPENWRT_DIR"
