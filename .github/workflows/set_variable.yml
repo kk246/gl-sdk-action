@@ -106,7 +106,7 @@ jobs:
           if [ -z "$BRANCH" ]; then
               git clone "$SOURCECODEURL"
           else
-              git clone --branch "$BRANCH" "$SOURCECODEURL"
+              git clone --branch "$BRANCH" --single-branch "$SOURCECODEURL"
           fi
           
           # Find the Makefile containing PKG_NAME
