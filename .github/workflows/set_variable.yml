@@ -144,17 +144,22 @@ jobs:
           sed -i "1i\src-link githubaction ${{ steps.pkg.outputs.PATH }}" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
+          ./scripts/feeds update githubaction
+          ./scripts/feeds install ${{ steps.pkg.outputs.NAME }}
 
       - name: Print Folders within Github Workspace
         run: |
           echo "Contents of '$(pwd)'"
           ls -R | grep ":$" | sed -e 's/:$//'
 
+      - name: Make ./package/feeds/githubaction/${PKGNAME}/prepare
+        working-directory: ./openwrt-sdk
+        run: |
+          make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.NAME }}/prepare
+
       - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
         working-directory: ./openwrt-sdk
         run: |
-          ./scripts/feeds update githubaction
-          ./scripts/feeds install ${{ steps.pkg.outputs.NAME }}
           make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.NAME }}/compile
   
       - name: Preparing *.IPKs for Upload
