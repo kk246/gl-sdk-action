@@ -159,15 +159,15 @@ jobs:
           echo "Contents of '$(pwd)'"
           ls -R | grep ":$" | sed -e 's/:$//'
 
-      - name: Make ./package/feeds/githubaction/${PKGNAME}/prepare
+      - name: Make ./package/feeds/githubaction/prepare
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.NAME }}/prepare
+          make V=s ./package/feeds/githubaction/prepare
 
-      - name: Make ./package/feeds/githubaction/${PKGNAME}/compile
+      - name: Make ./package/feeds/githubaction/compile
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.NAME }}/compile
+          make V=s ./package/feeds/githubaction/compile
   
       - name: Preparing *.IPKs for Upload
         working-directory: ./openwrt-sdk
