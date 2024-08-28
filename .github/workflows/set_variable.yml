@@ -111,9 +111,9 @@ jobs:
           mkdir -p  ${GITHUB_WORKSPACE}/buildsource
           cd ${GITHUB_WORKSPACE}/buildsource
           if [ -z "$BRANCH" ]; then
-              git clone "$SOURCECODEURL"
+              git clone "$SOURCECODEURL" newPKG
           else
-              git clone --branch "$BRANCH" --single-branch "$SOURCECODEURL"
+              git clone --branch "$BRANCH" --single-branch "$SOURCECODEURL" newPKG
           fi
           
           # Find the Makefile containing PKG_NAME
@@ -159,15 +159,15 @@ jobs:
           echo "Contents of '$(pwd)'"
           ls -R | grep ":$" | sed -e 's/:$//'
 
-      - name: Make ./package/feeds/githubaction/prepare
+      - name: Make ./package/feeds/githubaction/newPKG/prepare
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/kmod-8192eu/prepare
+          make V=s ./package/feeds/githubaction/newPKG/prepare
 
-      - name: Make ./package/feeds/githubaction/compile
+      - name: Make ./package/feeds/githubaction/newPKG/compile
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/kmod-8192eu/compile
+          make V=s ./package/feeds/githubaction/newPKG/compile
   
       - name: Preparing *.IPKs for Upload
         working-directory: ./openwrt-sdk
