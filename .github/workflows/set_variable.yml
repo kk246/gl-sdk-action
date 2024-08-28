@@ -162,12 +162,12 @@ jobs:
       - name: Make ./package/feeds/githubaction/prepare
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/prepare
+          make V=s ./package/feeds/githubaction/kmod-8192eu/prepare
 
       - name: Make ./package/feeds/githubaction/compile
         working-directory: ./openwrt-sdk
         run: |
-          make V=s ./package/feeds/githubaction/compile
+          make V=s ./package/feeds/githubaction/kmod-8192eu/compile
   
       - name: Preparing *.IPKs for Upload
         working-directory: ./openwrt-sdk
