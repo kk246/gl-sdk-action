@@ -2,7 +2,8 @@
 set -e
 clear
 
-SOURCECODEURL="-b dev-openwrt --single-branch https://github.com/stepheny/rtl8812au.git"
+#SOURCECODEURL="-b dev-openwrt --single-branch https://github.com/stepheny/rtl8812au.git"
+SOURCECODEURL=https://github.com/luochongjun/edgerouter.git
 
 banner() {
   echo "+------------------------------------------+"
@@ -37,12 +38,10 @@ fi
 # "============================================"
 banner "Downloading newPKG"
 PACKAGE_ROOT="$SDK_ROOT/package/newPKG"
-
-if [ ! -d "$PACKAGE_ROOT" ]; then
-  git clone ${SOURCECODEURL} $PACKAGE_ROOT
-else
-	echo "	Skipped. Folder exists at newPKG Target Directory"
+if [ -d "$PACKAGE_ROOT" ]; then
+  	rm -rf "$PACKAGE_ROOT"
 fi
+git clone ${SOURCECODEURL} $PACKAGE_ROOT
 
 # "============================================"
 banner "Make defconfig"
@@ -58,9 +57,9 @@ fi
 banner "Get Path"
 PACKAGE_ROOT_USED=$PACKAGE_ROOT
 
-cd $SDK_ROOT
+cd $PACKAGE_ROOT
 PKG_OPENWRT_DIR="$PACKAGE_ROOT/openwrt"
-if [ ! -f "$PKG_OPENWRT_DIR" ]; then
+if [ -d "$PKG_OPENWRT_DIR" ]; then
 	cd "$PKG_OPENWRT_DIR"
 fi
 
@@ -84,6 +83,7 @@ if [ "$(echo "$MAKEFILE" | wc -l)" -eq 1 ]; then
 	echo "Relative directory containing the Makefile: $RELATIVE_DIR"
 else
 	echo "Either no Makefile or multiple Makefiles found."
+	exit 1
 fi
 
 # "============================================"
@@ -103,4 +103,4 @@ cd $SDK_ROOT
 mkdir "${GITHUB_WORKSPACE}/output_ipks"
 find bin -type f -exec ls -lh {} \;
 find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
-ls -al "${GITHUB_WORKSPACE}/output_ipks/"
+ls "${GITHUB_WORKSPACE}/output_ipks/"
