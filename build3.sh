@@ -36,6 +36,11 @@ fi
 # gh run download 10340021810 --repo "kk246/gl-sdk-action"
 
 # "============================================"
+banner "Rebuild Feeds"
+$ ./scripts/feeds update -f
+$ ./scripts/feeds install -a
+
+# "============================================"
 banner "Downloading newPKG"
 PACKAGE_ROOT="$SDK_ROOT/package/newPKG"
 if [ -d "$PACKAGE_ROOT" ]; then
