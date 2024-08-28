@@ -129,7 +129,7 @@ jobs:
           	echo "MAKEFILE_DIR is set to: $MAKEFILE_DIR"
           	echo "PKG_NAME is set to: $PKG_NAME_VALUE"
             echo "PATH=$MAKEFILE_DIR" >> "$GITHUB_OUTPUT"
-            echo "NAME=$PKG_NAME" >> "$GITHUB_OUTPUT"
+            echo "NAME=$PKG_NAME_VALUE" >> "$GITHUB_OUTPUT"
           else
           	echo "Either no Makefile or multiple Makefiles found."
           	exit 1
