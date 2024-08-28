@@ -144,12 +144,18 @@ jobs:
           sed -i "1i\src-link githubaction ${{ steps.pkg.outputs.PATH }}" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
+          echo ""
+          echo "./scripts/feeds update githubaction"
           ./scripts/feeds update githubaction
-          ./scripts/feeds install ${{ steps.pkg.outputs.NAME }}
+          echo ""
+          echo "./scripts/feeds list -r githubaction"
+          ./scripts/feeds list -r githubaction
+          echo ""
+          echo "./scripts/feeds install -a -p githubaction"
+          ./scripts/feeds install -a -p githubaction
 
       - name: Print Folders within Github Workspace
         run: |
-          cd ${{ steps.pkg.outputs.PATH }}
           echo "Contents of '$(pwd)'"
           ls -R | grep ":$" | sed -e 's/:$//'
 
