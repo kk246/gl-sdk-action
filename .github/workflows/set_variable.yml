@@ -1,4 +1,4 @@
-run-name: Build ${{ github.event.inputs.pkgname }} for ${{ github.event.inputs.device }}
+run-name: Build ${{ github.event.inputs.pkgname || untitled }} for ${{ github.event.inputs.device }}
 
 on: 
   workflow_dispatch:
@@ -18,8 +18,8 @@ on:
         description: 'Source code URL'     
         required: true
       pkgname:
-        description: 'Openwrt package name'  
-        required: true
+        description: 'Package Description'
+        required: false
       email:
         description: 'Git account email address'
         required: false
@@ -29,7 +29,6 @@ on:
 
 env:
   SOURCECODEURL: ${{ github.event.inputs.sourcecode || 'https://github.com/luochongjun/edgerouter.git' }}
-  PKGNAME: ${{ github.event.inputs.pkgname || 'edgerouter' }}
   BOARD: ${{ github.event.inputs.device || 'MT2500' }}
   EMAIL: ${{ github.event.inputs.email }}
   PASSWORD: ${{ github.event.inputs.password }}
@@ -96,16 +95,36 @@ jobs:
           key: glsdk-${{ github.event.inputs.device }}
 
       - name: Get PKGNAME
+        id: pkg
         run: |
           mkdir -p  ${GITHUB_WORKSPACE}/buildsource
           cd ${GITHUB_WORKSPACE}/buildsource
           git clone "$SOURCECODEURL"
+          
+          # Find the Makefile containing PKG_NAME
+          MAKEFILE=$(find "$(pwd)" -type f -name 'Makefile' -exec grep -l 'PKG_NAME' {} +)
+          
+          # Check if exactly one Makefile was found
+          if [ "$(echo "$MAKEFILE" | wc -l)" -eq 1 ]; then
+          	# Extract the directory containing the Makefile
+          	MAKEFILE_DIR=$(dirname "$MAKEFILE")
+          
+          	# Extract PKG_NAME value from the Makefile
+          	PKG_NAME_VALUE=$(grep 'PKG_NAME' "$MAKEFILE" | awk -F'=' '{print $2}' | tr -d '[:space:]')
+          	echo "MAKEFILE_DIR is set to: $MAKEFILE_DIR"
+          	echo "PKG_NAME is set to: $PKG_NAME_VALUE"
+            echo "{PATH}={$MAKEFILE_DIR}" >> "$GITHUB_OUTPUT"
+            echo "{NAME}={$PKG_NAME}" >> "$GITHUB_OUTPUT"
+          else
+          	echo "Either no Makefile or multiple Makefiles found."
+          	exit 1
+          fi
   
       - name: Install PKGNAME
         working-directory: ./openwrt-sdk
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
-          sed -i "1i\src-link githubaction ${GITHUB_WORKSPACE}/buildsource" feeds.conf.default
+          sed -i "1i\src-link githubaction ${{ steps.pkg.outputs.PATH }}" feeds.conf.default
           echo Contents of "feeds.conf.default"
           cat feeds.conf.default
 
@@ -118,8 +137,8 @@ jobs:
         working-directory: ./openwrt-sdk
         run: |
           ./scripts/feeds update githubaction
-          ./scripts/feeds install ${PKGNAME}
-          make V=s ./package/feeds/githubaction/${PKGNAME}/compile
+          ./scripts/feeds install ${{ steps.pkg.outputs.NAME }}
+          make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.NAME }}/compile
   
       - name: Preparing *.IPKs for Upload
         working-directory: ./openwrt-sdk
@@ -132,7 +151,7 @@ jobs:
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.event.inputs.pkgname }}_related_ipks
+          name: ${{ steps.pkg.outputs.NAME }}_related_ipks
           if-no-files-found: error
           path: |
             ./output_ipks/*ipk*
