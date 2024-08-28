@@ -38,8 +38,8 @@ fi
 # "============================================"
 banner "Rebuild Feeds"
 cd $SDK_ROOT
-$ ./scripts/feeds update -f
-$ ./scripts/feeds install -a
+./scripts/feeds update -f
+./scripts/feeds install -a
 
 # "============================================"
 banner "Downloading newPKG"
