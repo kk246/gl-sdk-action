@@ -17,6 +17,9 @@ on:
       sourcecode:
         description: 'Source code URL'     
         required: true
+      repobranch:
+        description: 'Source code Branch'     
+        required: false
       pkgname:
         description: 'Package Description'
         required: false
@@ -29,6 +32,7 @@ on:
 
 env:
   SOURCECODEURL: ${{ github.event.inputs.sourcecode || 'https://github.com/luochongjun/edgerouter.git' }}
+  BRANCH: ${{ github.event.inputs.repobranch }}
   BOARD: ${{ github.event.inputs.device || 'MT2500' }}
   EMAIL: ${{ github.event.inputs.email }}
   PASSWORD: ${{ github.event.inputs.password }}
@@ -39,12 +43,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-  
-      - name: Update System Packages
+        
+      - name: Update System Packages 1
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
+          version: 1.0
+          execute_install_scripts: true
+
+      - name: Update System Packages 2
         run: |
-          sudo -E apt-get update
-          sudo -E apt-get install -y asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev
-          sudo -E apt-get install -y make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
+          # sudo -E apt-get update
+          # sudo -E apt-get install -y asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev
+          # sudo -E apt-get install -y make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
 
       - name: Restore Cache SDK
         id: cache-restore
@@ -99,7 +110,11 @@ jobs:
         run: |
           mkdir -p  ${GITHUB_WORKSPACE}/buildsource
           cd ${GITHUB_WORKSPACE}/buildsource
-          git clone "$SOURCECODEURL"
+          if [ -z "$BRANCH" ]; then
+              git clone "$SOURCECODEURL"
+          else
+              git clone --branch "$BRANCH" --single-branch "$SOURCECODEURL"
+          fi
           
           # Find the Makefile containing PKG_NAME
           MAKEFILE=$(find "$(pwd)" -type f -name 'Makefile' -exec grep -l 'PKG_NAME' {} +)
@@ -108,18 +123,20 @@ jobs:
           if [ "$(echo "$MAKEFILE" | wc -l)" -eq 1 ]; then
           	# Extract the directory containing the Makefile
           	MAKEFILE_DIR=$(dirname "$MAKEFILE")
+            FEED_DIR="${MAKEFILE_DIR%/*}"
           
           	# Extract PKG_NAME value from the Makefile
           	PKG_NAME_VALUE=$(grep 'PKG_NAME' "$MAKEFILE" | awk -F'=' '{print $2}' | tr -d '[:space:]')
           	echo "MAKEFILE_DIR is set to: $MAKEFILE_DIR"
+            echo "FEED_DIR is set to: $FEED_DIR"
           	echo "PKG_NAME is set to: $PKG_NAME_VALUE"
-            echo "PATH=$MAKEFILE_DIR" >> "$GITHUB_OUTPUT"
+            echo "PATH=$FEED_DIR" >> "$GITHUB_OUTPUT"
             echo "NAME=$PKG_NAME_VALUE" >> "$GITHUB_OUTPUT"
           else
           	echo "Either no Makefile or multiple Makefiles found."
           	exit 1
           fi
-  
+          
       - name: Install PKGNAME
         working-directory: ./openwrt-sdk
         run: |
