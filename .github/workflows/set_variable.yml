@@ -17,6 +17,9 @@ on:
       sourcecode:
         description: 'Source code URL'     
         required: true
+      repobranch:
+        description: 'Source code Branch'     
+        required: false
       pkgname:
         description: 'Package Description'
         required: false
@@ -29,6 +32,7 @@ on:
 
 env:
   SOURCECODEURL: ${{ github.event.inputs.sourcecode || 'https://github.com/luochongjun/edgerouter.git' }}
+  BRANCH: ${{ github.event.inputs.repobranch }}
   BOARD: ${{ github.event.inputs.device || 'MT2500' }}
   EMAIL: ${{ github.event.inputs.email }}
   PASSWORD: ${{ github.event.inputs.password }}
@@ -99,7 +103,11 @@ jobs:
         run: |
           mkdir -p  ${GITHUB_WORKSPACE}/buildsource
           cd ${GITHUB_WORKSPACE}/buildsource
-          git clone "$SOURCECODEURL"
+          if [ -z "$BRANCH" ]; then
+              git clone "$SOURCECODEURL"
+          else
+              git clone --branch "$BRANCH" "$SOURCECODEURL"
+          fi
           
           # Find the Makefile containing PKG_NAME
           MAKEFILE=$(find "$(pwd)" -type f -name 'Makefile' -exec grep -l 'PKG_NAME' {} +)
