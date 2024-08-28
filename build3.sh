@@ -38,7 +38,8 @@ fi
 # "============================================"
 banner "Rebuild Feeds"
 cd $SDK_ROOT
-./scripts/feeds update -f
+# ./scripts/feeds update -f
+./scripts/feeds update -i
 ./scripts/feeds install -a
 
 # "============================================"
