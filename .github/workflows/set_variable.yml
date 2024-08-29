@@ -148,7 +148,7 @@ jobs:
           echo "./scripts/feeds list -r githubaction"
           ./scripts/feeds list -r githubaction
           
-          result=$(./scripts/feeds list -r githubaction | cut -f1)
+          result=$(./scripts/feeds list -r githubaction | awk '{print $1}')
           echo "NAME=$result" >> "$GITHUB_OUTPUT"
           
           echo ""
