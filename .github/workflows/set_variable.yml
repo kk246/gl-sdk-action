@@ -157,13 +157,14 @@ jobs:
 
       - name: Print Folders within Github Workspace
         run: |
+          echo ""
           cd ${GITHUB_WORKSPACE}/openwrt-sdk/package/feeds/githubaction
           echo "Contents of '$(pwd)'"
           ls -al $(pwd)
-          
+          echo ""
           cd ${GITHUB_WORKSPACE}/buildsource
           echo "Contents of '$(pwd)'"
-          tree -–noreport -t $(pwd)
+          tree -t $(pwd)
 
       - name: Make ./package/feeds/githubaction/newPKG/prepare
         working-directory: ./openwrt-sdk
