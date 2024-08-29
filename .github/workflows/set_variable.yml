@@ -191,14 +191,14 @@ jobs:
           path: |
             ./output_ipks/*ipk*
             
-      - name: Preparing GL-SDK for Upload
-        run: |
-          tar -czvf glsdk-${{ github.event.inputs.device }}-full.tar.gz openwrt-sdk/
-          ls -l
+      # - name: Preparing GL-SDK for Upload
+      #   run: |
+      #     tar -czvf glsdk-${{ github.event.inputs.device }}-full.tar.gz openwrt-sdk/
+      #     ls -l
           
-      - name: Upload Artefacts (GL-SDK)
-        uses: actions/upload-artifact@v2
-        with:
-          name: glsdk-${{ github.event.inputs.device }}
-          path: |
-            ./glsdk-${{ github.event.inputs.device }}-full.tar.gz
+      # - name: Upload Artefacts (GL-SDK)
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: glsdk-${{ github.event.inputs.device }}
+      #     path: |
+      #       ./glsdk-${{ github.event.inputs.device }}-full.tar.gz
