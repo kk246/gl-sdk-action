@@ -44,18 +44,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
         
-      - name: Update System Packages 1
+      - name: Update System Packages
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
           version: 1.0
           execute_install_scripts: true
-
-      - name: Update System Packages 2
-        run: |
-          # sudo -E apt-get update
-          # sudo -E apt-get install -y asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev
-          # sudo -E apt-get install -y make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev
 
       - name: Restore Cache SDK
         id: cache-restore
@@ -139,6 +133,7 @@ jobs:
           fi
           
       - name: Install PKGNAME
+        id: pkg2
         working-directory: ./openwrt-sdk
         run: |
           cd $GITHUB_WORKSPACE/openwrt-sdk
@@ -148,9 +143,14 @@ jobs:
           echo ""
           echo "./scripts/feeds update githubaction"
           ./scripts/feeds update githubaction
+          
           echo ""
           echo "./scripts/feeds list -r githubaction"
           ./scripts/feeds list -r githubaction
+          
+          result=$(./scripts/feeds list -r githubaction | cut -f1)
+          echo "NAME=$result" >> "$GITHUB_OUTPUT"
+          
           echo ""
           echo "./scripts/feeds install -a -p githubaction"
           ./scripts/feeds install -a -p githubaction
@@ -181,7 +181,7 @@ jobs:
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.pkg.outputs.NAME }}_related_ipks
+          name: ${{ steps.pkg2.outputs.NAME }}_related_ipks
           if-no-files-found: error
           path: |
             ./output_ipks/*ipk*
