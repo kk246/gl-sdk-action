@@ -1,4 +1,4 @@
-run-name: Build ${{ github.event.inputs.pkgname || 'untitled' }} for ${{ github.event.inputs.device }}
+run-name: Build ${{ github.event.inputs.pkgname || github.event.inputs.sourcecode || 'untitled' }};${{ github.event.inputs.repobranch }} for ${{ github.event.inputs.device }}
 
 on: 
   workflow_dispatch:
