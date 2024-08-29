@@ -164,6 +164,7 @@ jobs:
         working-directory: ./openwrt-sdk
         run: |
           make V=s ./package/feeds/githubaction/newPKG/prepare
+        continue-on-error: true
 
       - name: Make ./package/feeds/githubaction/newPKG/compile
         working-directory: ./openwrt-sdk
