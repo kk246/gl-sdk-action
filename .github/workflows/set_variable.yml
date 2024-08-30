@@ -170,10 +170,11 @@ jobs:
           make defconfig
           cp .config .config-after
           echo ""
-          diff -u ".config-before" ".config-after" > config.diff
+          diff -u .config-before .config-after > config.diff
           echo "::group::{"Contents of 'config.diff'",unfold}"
-          diff -u ".config-before" ".config-after"
+          diff -u .config-before .config-after
           echo "::endgroup::{unfold}"
+          
 
       - name: Print Folders within Github Workspace
         run: |
