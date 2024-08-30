@@ -83,6 +83,7 @@ jobs:
         if: steps.cache-restore.outputs.cache-hit != 'true'
         working-directory: ./openwrt-sdk
         run: |
+          rm .config
           echo CONFIG_ALL=n >.config
           echo CONFIG_SIGNED_PACKAGES=n >>.config
           make defconfig
@@ -165,17 +166,18 @@ jobs:
         working-directory: ./openwrt-sdk
         run: |
           # https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
+          
           cp .config .config-before
           echo "CONFIG_PACKAGE_${{ steps.pkg2.outputs.NAME }}=m" >> .config
           make defconfig
           cp .config .config-after
-          echo ""
-          diff -u .config-before .config-after > config.diff
+          
+          echo "creating 'config.diff'"
+          ./scripts/diffconfig.sh > config.diff
           echo "::group::{"Contents of 'config.diff'",unfold}"
-          diff -u .config-before .config-after
+          grep -v '^#' config.diff
           echo "::endgroup::{unfold}"
           
-
       - name: Print Folders within Github Workspace
         run: |
           echo ""
