@@ -191,9 +191,9 @@ jobs:
           ls -al "${GITHUB_WORKSPACE}/output_ipks/"
   
       - name: Upload Artefacts (IPKs)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.pkg2.outputs.NAME }}_related_ipks
+          name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=$LINUX_VERMAGIC
           if-no-files-found: error
           path: |
             ./output_ipks/*ipk*
