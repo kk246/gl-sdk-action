@@ -83,7 +83,6 @@ jobs:
         if: steps.cache-restore.outputs.cache-hit != 'true'
         working-directory: ./openwrt-sdk
         run: |
-          rm .config
           echo CONFIG_ALL=n >.config
           echo CONFIG_SIGNED_PACKAGES=n >>.config
           make defconfig
@@ -195,13 +194,13 @@ jobs:
         run: |
           make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/compile
   
-      # - name: Preparing *.IPKs for Upload
-      #   working-directory: ./openwrt-sdk
-      #   run: |
-      #     mkdir "${GITHUB_WORKSPACE}/output_ipks"
-      #     find bin -type f -exec ls -lh {} \;
-      #     find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
-      #     ls -al "${GITHUB_WORKSPACE}/output_ipks/"
+      - name: Preparing *.IPKs for Upload
+        working-directory: ./openwrt-sdk
+        run: |
+          mkdir "${GITHUB_WORKSPACE}/output_ipks"
+          find bin -type f -exec ls -lh {} \;
+          find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
+          ls -al "${GITHUB_WORKSPACE}/output_ipks/"
 
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v4
@@ -209,16 +208,8 @@ jobs:
           name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${{env.LINUX_VERMAGIC}}
           if-no-files-found: error
           path: |
-            ./openwrt-sdk/bin/
+            ./output_ipks/*ipk*
             ./openwrt-sdk/config.diff
-  
-      # - name: Upload Artefacts (IPKs)
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${{env.LINUX_VERMAGIC}}
-      #     if-no-files-found: error
-      #     path: |
-      #       ./output_ipks/*ipk*
             
       # - name: Preparing GL-SDK for Upload
       #   run: |
