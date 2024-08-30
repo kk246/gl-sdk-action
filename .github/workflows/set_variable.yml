@@ -177,6 +177,7 @@ jobs:
           echo "::group::{"Contents of 'config.diff'",unfold}"
           grep -v '^#' config.diff
           echo "::endgroup::{unfold}"
+          diff -u ".config-before" ".config-after"
           
       - name: Print Folders within Github Workspace
         run: |
