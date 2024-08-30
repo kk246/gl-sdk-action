@@ -166,18 +166,13 @@ jobs:
         working-directory: ./openwrt-sdk
         run: |
           # https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
-          
-          cp .config .config-before
           echo "CONFIG_PACKAGE_${{ steps.pkg2.outputs.NAME }}=m" >> .config
           make defconfig
-          cp .config .config-after
           
+          echo ""
           echo "creating 'config.diff'"
           ./scripts/diffconfig.sh > config.diff
-          echo "::group::{"Contents of 'config.diff'",unfold}"
           grep -v '^#' config.diff
-          echo "::endgroup::{unfold}"
-          diff -u ".config-before" ".config-after"
           
       - name: Print Folders within Github Workspace
         run: |
