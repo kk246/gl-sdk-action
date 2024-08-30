@@ -165,9 +165,17 @@ jobs:
         working-directory: ./openwrt-sdk
         run: |
           # https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
-          cd $GITHUB_WORKSPACE/openwrt-sdk
+          cp .config .config-before
           echo "CONFIG_PACKAGE_${{ steps.pkg2.outputs.NAME }}=m" >> .config
           make defconfig
+          cp .config .config-after
+          echo ""
+          diff -u ".config-before" ".config-after" > config.diff
+          echo "::group::{"Contents of 'config.diff'",unfold}"
+          diff -u ".config-before" ".config-after"
+          echo "::endgroup::{unfold}"
+          
+          
 
       - name: Print Folders within Github Workspace
         run: |
@@ -204,7 +212,8 @@ jobs:
           name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${{env.LINUX_VERMAGIC}}
           if-no-files-found: error
           path: |
-            ./openwrt-sdk/bin/targets
+            ./openwrt-sdk/bin/
+            ./openwrt-sdk/config.diff
   
       # - name: Upload Artefacts (IPKs)
       #   uses: actions/upload-artifact@v4
