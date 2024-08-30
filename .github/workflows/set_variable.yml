@@ -193,7 +193,7 @@ jobs:
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=$LINUX_VERMAGIC
+          name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${LINUX_VERMAGIC}
           if-no-files-found: error
           path: |
             ./output_ipks/*ipk*
