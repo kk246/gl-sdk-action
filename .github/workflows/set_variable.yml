@@ -133,8 +133,6 @@ jobs:
             echo "MAKE=$MAKE_NAME" >> "$GITHUB_OUTPUT"
             echo "PATH=$FEED_DIR" >> "$GITHUB_OUTPUT"
             echo "NAME=$PKG_NAME_VALUE" >> "$GITHUB_OUTPUT"
-
-            echo "CONFIG_PACKAGE_${PKG_NAME_VALUE}=m" >> "$GITHUB_OUTPUT"
           else
           	echo "Either no Makefile or multiple Makefiles found."
           	exit 1
@@ -162,6 +160,14 @@ jobs:
           echo ""
           echo "./scripts/feeds install -a -p githubaction"
           ./scripts/feeds install -a -p githubaction
+          
+      - name: Update defconfig (with newPKG)
+        working-directory: ./openwrt-sdk
+        run: |
+          # https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
+          cd $GITHUB_WORKSPACE/openwrt-sdk
+          echo "CONFIG_PACKAGE_${{ steps.pkg2.outputs.NAME }}=m" >> .config
+          make defconfig
 
       - name: Print Folders within Github Workspace
         run: |
