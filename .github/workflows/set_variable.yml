@@ -182,21 +182,29 @@ jobs:
         run: |
           make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/compile
   
-      - name: Preparing *.IPKs for Upload
-        working-directory: ./openwrt-sdk
-        run: |
-          mkdir "${GITHUB_WORKSPACE}/output_ipks"
-          find bin -type f -exec ls -lh {} \;
-          find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
-          ls -al "${GITHUB_WORKSPACE}/output_ipks/"
-  
+      # - name: Preparing *.IPKs for Upload
+      #   working-directory: ./openwrt-sdk
+      #   run: |
+      #     mkdir "${GITHUB_WORKSPACE}/output_ipks"
+      #     find bin -type f -exec ls -lh {} \;
+      #     find bin -type f -name "*.ipk" -exec cp -f {} "${GITHUB_WORKSPACE}/output_ipks" \; 
+      #     ls -al "${GITHUB_WORKSPACE}/output_ipks/"
+
       - name: Upload Artefacts (IPKs)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${LINUX_VERMAGIC}
+          name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${{env.LINUX_VERMAGIC}}
           if-no-files-found: error
           path: |
-            ./output_ipks/*ipk*
+            ./openwrt-sdk/bin
+  
+      # - name: Upload Artefacts (IPKs)
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ steps.pkg2.outputs.NAME }}-LINUX_VERMAGIC=${{env.LINUX_VERMAGIC}}
+      #     if-no-files-found: error
+      #     path: |
+      #       ./output_ipks/*ipk*
             
       # - name: Preparing GL-SDK for Upload
       #   run: |
