@@ -73,16 +73,11 @@ jobs:
           ./scripts/feeds update -a
         continue-on-error: true
   
-      - name: Install ./scripts/feeds
+      - name: Install ./scripts/feeds and Make .defconfig
         if: steps.cache-restore.outputs.cache-hit != 'true'
         working-directory: ./openwrt-sdk
         run: |
           ./scripts/feeds install -a
-  
-      - name: Make defconfig
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        working-directory: ./openwrt-sdk
-        run: |
           echo CONFIG_ALL=n >.config
           echo CONFIG_SIGNED_PACKAGES=n >>.config
           make defconfig 2> /dev/null
@@ -188,7 +183,7 @@ jobs:
       - name: Make ./package/feeds/githubaction/newPKG/prepare
         working-directory: ./openwrt-sdk
         run: |
-          make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/prepare
+          make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/prepare 2> /dev/null
 
       - name: Make ./package/feeds/githubaction/newPKG/compile
         working-directory: ./openwrt-sdk
