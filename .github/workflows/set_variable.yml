@@ -91,7 +91,7 @@ jobs:
         if: steps.cache-restore.outputs.cache-hit != 'true'
         working-directory: ./openwrt-sdk
         run: |
-          make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/luci/luci-base/compile
+          make V=s ./package/feeds/luci/luci-base/compile
   
       - name: Save Cache SDK
         if: steps.cache-restore.outputs.cache-hit != 'true'
@@ -175,7 +175,7 @@ jobs:
       - name: Make ./package/feeds/githubaction/newPKG/prepare
         working-directory: ./openwrt-sdk
         run: |
-          make V=s LINUX_VERMAGIC:=$LINUX_VERMAGIC ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/prepare
+          make V=s ./package/feeds/githubaction/${{ steps.pkg.outputs.MAKE }}/prepare
 
       - name: Make ./package/feeds/githubaction/newPKG/compile
         working-directory: ./openwrt-sdk
