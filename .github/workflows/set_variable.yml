@@ -167,11 +167,11 @@ jobs:
         run: |
           # https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
           echo "CONFIG_PACKAGE_${{ steps.pkg2.outputs.NAME }}=m" >> .config
-          make defconfig
+          make defconfig > /dev/null 2>&1
           
           echo ""
           echo "creating 'config.diff'"
-          ./scripts/diffconfig.sh > config.diff
+          ./scripts/diffconfig.sh > config.diff 2> /dev/null
           grep -v '^#' config.diff
           
       - name: Print Folders within Github Workspace
